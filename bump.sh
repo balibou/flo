@@ -42,6 +42,7 @@ if [ -f VERSION ]; then
     git tag -a -m "Tagging version $INPUT_STRING" "v$INPUT_STRING"
     git checkout master
     git merge --no-ff hotfix-$INPUT_STRING
+    git push origin master -f
     git push origin --tags
     git branch -d hotfix-$INPUT_STRING
 else
@@ -63,6 +64,7 @@ else
         git tag -a -m "Tagging version $PACKAGE_VERSION" "v$PACKAGE_VERSION"
         git checkout master
         git merge --no-ff hotfix-$PACKAGE_VERSION
+        git push origin master -f
         git push origin --tags
         git branch -d hotfix-$PACKAGE_VERSION
     fi
