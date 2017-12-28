@@ -13,6 +13,10 @@
 # a file called CHANGES (under the title of the new version
 # number) and create a GIT tag.
 
+function pause(){
+   read -p "$*"
+}
+
 prop="version"
 PACKAGE_VERSION="$(node -pe "require('./package.json')['$prop']")"
 
@@ -38,6 +42,7 @@ if [ -f VERSION ]; then
     cat CHANGES >> tmpfile
     mv tmpfile CHANGES
     git add .
+    pause 'Press [Enter] key to continue...'
     git commit -m "Version bump to $INPUT_STRING"
     git tag -a -m "Tagging version $INPUT_STRING" "v$INPUT_STRING"
     git checkout master
