@@ -1,11 +1,11 @@
 {
   "name": "flo",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "hotfix": "yarn version -m 'chore(package): release v%s' && bash bump.sh",
+    "hotfix": "yarn version -m 'chore(package): release v%s'",
     "test1": "echo \"Error: no test specified\" && exit 1",
     "test2": "echo \"Error: no test specified\" && exit 1"
   },
