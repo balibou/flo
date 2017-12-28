@@ -43,7 +43,7 @@ if [ -f VERSION ]; then
     git checkout master
     git merge --no-ff hotfix-$INPUT_STRING
     git push origin --tags
-    git branch -d hotfix-$PACKAGE_VERSION
+    git branch -d hotfix-$INPUT_STRING
 else
     echo "Could not find a VERSION file"
     read -p "Do you want to create a version file and start from scratch? [y]" RESPONSE
