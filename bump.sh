@@ -43,6 +43,7 @@ if [ -f VERSION ]; then
     git checkout master
     git merge --no-ff hotfix-$INPUT_STRING
     git push origin --tags
+    git branch -d hotfix-$PACKAGE_VERSION
 else
     echo "Could not find a VERSION file"
     read -p "Do you want to create a version file and start from scratch? [y]" RESPONSE
@@ -58,10 +59,11 @@ else
         echo "" >> CHANGES
         echo "" >> CHANGES
         git add .
-        git commit -m "Added VERSION and CHANGES files, Version bump to v$PACKAGE_VERSION"
+        git commit -m "Added VERSION, CHANGES and hotfix files, Version bump to v$PACKAGE_VERSION"
         git tag -a -m "Tagging version $PACKAGE_VERSION" "v$PACKAGE_VERSION"
         git checkout master
         git merge --no-ff hotfix-$PACKAGE_VERSION
         git push origin --tags
+        git branch -d hotfix-$PACKAGE_VERSION
     fi
 fi
