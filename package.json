@@ -5,9 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "hotfix": "yarn version -m 'chore(package): release v%s' && bash bump.sh",
-    "test1": "echo \"Error: no test specified\" && exit 1",
-    "test2": "echo \"Error: no test specified\" && exit 1"
+    "pre-hotfix": "bash bump.sh"
   },
   "author": "",
   "license": "ISC"

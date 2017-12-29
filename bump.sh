@@ -13,12 +13,15 @@
 # a file called CHANGES (under the title of the new version
 # number) and create a GIT tag.
 
-function pause(){
-   read -p "$*"
-}
-
-prop="version"
-PACKAGE_VERSION="$(node -pe "require('./package.json')['$prop']")"
+#########################################################
+# $ git checkout -b hotfix-1.2.1 master
+# Switched to a new branch "hotfix-1.2.1"
+# $ ./bump-version.sh 1.2.1
+# Files modified successfully, version bumped to 1.2.1.
+# $ git commit -a -m "Bumped version number to 1.2.1"
+# [hotfix-1.2.1 41e61bb] Bumped version number to 1.2.1
+# 1 files changed, 1 insertions(+), 1 deletions(-)
+#########################################################
 
 if [ -f VERSION ]; then
     BASE_STRING=`cat VERSION`
@@ -29,10 +32,13 @@ if [ -f VERSION ]; then
     echo "Current version : $BASE_STRING"
     V_PATCH=$((V_PATCH + 1))
     SUGGESTED_VERSION="$V_MAJOR.$V_MINOR.$V_PATCH"
-    read -p "Enter a version number [$SUGGESTED_VERSION]: " INPUT_STRING
+    read -p "Enter a version number [Suggested (press Enter): $SUGGESTED_VERSION]: " INPUT_STRING
     if [ "$INPUT_STRING" = "" ]; then
         INPUT_STRING=$SUGGESTED_VERSION
     fi
+
+    git checkout -b hotfix-$INPUT_STRING master
+
     echo "Will set new version to be $INPUT_STRING"
     echo $INPUT_STRING > VERSION
     echo "Version $INPUT_STRING:" > tmpfile
@@ -41,15 +47,14 @@ if [ -f VERSION ]; then
     echo "" >> tmpfile
     cat CHANGES >> tmpfile
     mv tmpfile CHANGES
-    git add .
-    pause 'Press [Enter] key to continue...'
-    git commit -m "Version bump to $INPUT_STRING"
-    git tag -a -m "Tagging version $INPUT_STRING" "v$INPUT_STRING"
-    git checkout master
-    git merge --no-ff hotfix-$INPUT_STRING
-    git push origin master -f
-    git push origin --tags
-    git branch -d hotfix-$INPUT_STRING
+    git add CHANGES VERSION
+
+    # git commit -m "Version bump to $INPUT_STRING"
+    git commit -a -m "Version bump to $INPUT_STRING"
+
+    # git tag -a -m "Tagging version $INPUT_STRING" "v$INPUT_STRING"
+    # git push origin --tags
+    echo "Make your hotfix on this branch, commit it then run yarn post-hotfix"
 else
     echo "Could not find a VERSION file"
     read -p "Do you want to create a version file and start from scratch? [y]" RESPONSE
@@ -59,18 +64,15 @@ else
     if [ "$RESPONSE" = "yes" ]; then RESPONSE="y"; fi
     if [ "$RESPONSE" = "YES" ]; then RESPONSE="y"; fi
     if [ "$RESPONSE" = "y" ]; then
-        echo $PACKAGE_VERSION > VERSION
-        echo "Version $PACKAGE_VERSION" > CHANGES
+        echo "0.1.0" > VERSION
+        echo "Version 0.1.0" > CHANGES
         git log --pretty=format:" - %s" >> CHANGES
         echo "" >> CHANGES
         echo "" >> CHANGES
-        git add .
-        git commit -m "Added VERSION, CHANGES and hotfix files, Version bump to v$PACKAGE_VERSION"
-        git tag -a -m "Tagging version $PACKAGE_VERSION" "v$PACKAGE_VERSION"
-        git checkout master
-        git merge --no-ff hotfix-$PACKAGE_VERSION
-        git push origin master -f
+        git add VERSION CHANGES
+        git commit -m "Added VERSION and CHANGES files, Version bump to v0.1.0"
+        git tag -a -m "Tagging version 0.1.0" "v0.1.0"
         git push origin --tags
-        git branch -d hotfix-$PACKAGE_VERSION
     fi
+
 fi
