@@ -60,7 +60,7 @@ if [ -f VERSION ]; then
     cat CHANGES >> tmpfile
     mv tmpfile CHANGES
     # git add CHANGES VERSION
-    yarn version --new-version $INPUT_STRING config set version-git-tag false
+    yarn version --new-version $INPUT_STRING --no-git-tag-version
     # git commit -m "Version bump to $INPUT_STRING"
     git commit -a -m "Version bump to $INPUT_STRING"
 
