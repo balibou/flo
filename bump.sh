@@ -24,6 +24,7 @@
 #########################################################
 
 if [ -f VERSION ]; then
+    ## PARSING VERSION + DEFINE HOTFIX VERSION
     BASE_STRING=`cat VERSION`
     BASE_LIST=(`echo $BASE_STRING | tr '.' ' '`)
     V_MAJOR=${BASE_LIST[0]}
@@ -37,8 +38,10 @@ if [ -f VERSION ]; then
         INPUT_STRING=$SUGGESTED_VERSION
     fi
 
+    ## BRANCH VERSION HOTFIX
     git checkout -b hotfix-$INPUT_STRING master
 
+    ## BUMP VERSION
     echo "Will set new version to be $INPUT_STRING"
     echo $INPUT_STRING > VERSION
     echo "Version $INPUT_STRING:" > tmpfile
@@ -47,13 +50,15 @@ if [ -f VERSION ]; then
     echo "" >> tmpfile
     cat CHANGES >> tmpfile
     mv tmpfile CHANGES
-    git add CHANGES VERSION
+    # git add CHANGES VERSION
 
     # git commit -m "Version bump to $INPUT_STRING"
     git commit -a -m "Version bump to $INPUT_STRING"
 
     # git tag -a -m "Tagging version $INPUT_STRING" "v$INPUT_STRING"
     # git push origin --tags
+
+    ## ASK FOR YOUR COMMIT FIX
     echo "Make your hotfix on this branch, commit it then run yarn post-hotfix"
 else
     echo "Could not find a VERSION file"
