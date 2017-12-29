@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# this script will display the current version, automatically
-# suggest a "minor" version update, and ask for input to use
-# the suggestion, or a newly entered value.
+# this script will create a hotfix branch
 
 # get package version
 prop="version"
