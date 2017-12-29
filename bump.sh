@@ -23,15 +23,6 @@
 # 1 files changed, 1 insertions(+), 1 deletions(-)
 #########################################################
 
-#####################################
-# $ git checkout master
-# Switched to branch 'master'
-# $ git merge --no-ff hotfix-1.2.1
-# Merge made by recursive.
-# (Summary of changes)
-# $ git tag -a 1.2.1
-#####################################
-
 if [ -f VERSION ]; then
     ## PARSING VERSION + DEFINE HOTFIX VERSION
     BASE_STRING=`cat VERSION`
