@@ -13,16 +13,6 @@
 # a file called CHANGES (under the title of the new version
 # number) and create a GIT tag.
 
-#########################################################
-# $ git checkout -b hotfix-1.2.1 master
-# Switched to a new branch "hotfix-1.2.1"
-# $ ./bump-version.sh 1.2.1
-# Files modified successfully, version bumped to 1.2.1.
-# $ git commit -a -m "Bumped version number to 1.2.1"
-# [hotfix-1.2.1 41e61bb] Bumped version number to 1.2.1
-# 1 files changed, 1 insertions(+), 1 deletions(-)
-#########################################################
-
 if [ -f VERSION ]; then
     ## PARSING VERSION + DEFINE HOTFIX VERSION
     BASE_STRING=`cat VERSION`
@@ -60,24 +50,4 @@ if [ -f VERSION ]; then
 
     ## ASK FOR YOUR COMMIT FIX
     echo "Make your hotfix on this branch, commit it then run yarn post-hotfix"
-else
-    echo "Could not find a VERSION file"
-    read -p "Do you want to create a version file and start from scratch? [y]" RESPONSE
-    if [ "$RESPONSE" = "" ]; then RESPONSE="y"; fi
-    if [ "$RESPONSE" = "Y" ]; then RESPONSE="y"; fi
-    if [ "$RESPONSE" = "Yes" ]; then RESPONSE="y"; fi
-    if [ "$RESPONSE" = "yes" ]; then RESPONSE="y"; fi
-    if [ "$RESPONSE" = "YES" ]; then RESPONSE="y"; fi
-    if [ "$RESPONSE" = "y" ]; then
-        echo "0.1.0" > VERSION
-        echo "Version 0.1.0" > CHANGES
-        git log --pretty=format:" - %s" >> CHANGES
-        echo "" >> CHANGES
-        echo "" >> CHANGES
-        git add VERSION CHANGES
-        git commit -m "Added VERSION and CHANGES files, Version bump to v0.1.0"
-        git tag -a -m "Tagging version 0.1.0" "v0.1.0"
-        git push origin --tags
-    fi
-
 fi
