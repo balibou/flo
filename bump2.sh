@@ -36,7 +36,9 @@ if [ -f VERSION ]; then
     GIT_VERSION=$(echo $GIT_BRANCH | sed 's/.*hotfix-\([^ ]*\).*/\1/')
     git checkout master
     git merge --no-ff $GIT_BRANCH
-    git tag -a $GIT_VERSION
+    # git tag -a $GIT_VERSION
+    git tag -a -m "Tagging version $GIT_VERSION" "v$GIT_VERSION"
+    git push origin --tags
 
 else
     echo "Could not find a VERSION file"
