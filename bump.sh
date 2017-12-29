@@ -1,58 +1,33 @@
 #!/bin/bash
 
-# works with a file called VERSION in the current directory,
-# the contents of which should be a semantic version number
-# such as "1.2.3"
-
 # this script will display the current version, automatically
 # suggest a "minor" version update, and ask for input to use
 # the suggestion, or a newly entered value.
 
-# once the new version number is determined, the script will
-# pull a list of changes from git history, prepend this to
-# a file called CHANGES (under the title of the new version
-# number) and create a GIT tag.
-
+# get package version
 prop="version"
 PACKAGE_VERSION="$(node -pe "require('./package.json')['$prop']")"
 
-if [ -f VERSION ]; then
-    ## PARSING VERSION + DEFINE HOTFIX VERSION
-    BASE_STRING=$PACKAGE_VERSION
-    BASE_LIST=(`echo $BASE_STRING | tr '.' ' '`)
-    V_MAJOR=${BASE_LIST[0]}
-    V_MINOR=${BASE_LIST[1]}
-    V_PATCH=${BASE_LIST[2]}
-    echo "Current version : $BASE_STRING"
-    V_PATCH=$((V_PATCH + 1))
-    SUGGESTED_VERSION="$V_MAJOR.$V_MINOR.$V_PATCH"
-    read -p "Enter a version number [Suggested (press Enter): $SUGGESTED_VERSION]: " INPUT_STRING
-    if [ "$INPUT_STRING" = "" ]; then
-        INPUT_STRING=$SUGGESTED_VERSION
-    fi
-
-    ## BRANCH VERSION HOTFIX
-    git checkout -b hotfix-$INPUT_STRING master
-
-    ## BUMP VERSION
-    # echo "Will set new version to be $INPUT_STRING"
-    # echo $INPUT_STRING > VERSION
-    # echo "Version $INPUT_STRING:" > tmpfile
-    # git log --pretty=format:" - %s" "v$BASE_STRING"...HEAD >> tmpfile
-    # echo "" >> tmpfile
-    # echo "" >> tmpfile
-    # cat CHANGES >> tmpfile
-    # mv tmpfile CHANGES
-    # git add CHANGES VERSION
-    yarn version --new-version $INPUT_STRING --no-git-tag-version
-    # git commit -m "Version bump to $INPUT_STRING"
-    git commit -a -m "Version bump to $INPUT_STRING"
-
-    # git tag -a -m "Tagging version $INPUT_STRING" "v$INPUT_STRING"
-    # git push origin --tags
-
-    ## ASK FOR YOUR COMMIT FIX
-    echo "Make your hotfix on this branch, commit it then run yarn post-hotfix"
-else
-    echo "Could not find a VERSION file"
+# define hotfix version
+BASE_STRING=$PACKAGE_VERSION
+BASE_LIST=(`echo $BASE_STRING | tr '.' ' '`)
+V_MAJOR=${BASE_LIST[0]}
+V_MINOR=${BASE_LIST[1]}
+V_PATCH=${BASE_LIST[2]}
+echo "Current version : $BASE_STRING"
+V_PATCH=$((V_PATCH + 1))
+SUGGESTED_VERSION="$V_MAJOR.$V_MINOR.$V_PATCH"
+read -p "Enter a version number [Suggested (press Enter): $SUGGESTED_VERSION]: " INPUT_STRING
+if [ "$INPUT_STRING" = "" ]; then
+    INPUT_STRING=$SUGGESTED_VERSION
 fi
+
+# checkout hotfix branch
+git checkout -b hotfix-$INPUT_STRING master
+
+# bump package version
+yarn version --new-version $INPUT_STRING --no-git-tag-version
+git commit -a -m "Version bump to $INPUT_STRING"
+
+# ask for hotfix commit
+echo "Commit your hotfix on this branch then run yarn post-hotfix"
