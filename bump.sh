@@ -50,4 +50,6 @@ if [ -f VERSION ]; then
 
     ## ASK FOR YOUR COMMIT FIX
     echo "Make your hotfix on this branch, commit it then run yarn post-hotfix"
+else
+    echo "Could not find a VERSION file"
 fi
