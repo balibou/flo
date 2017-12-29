@@ -13,9 +13,12 @@
 # a file called CHANGES (under the title of the new version
 # number) and create a GIT tag.
 
+prop="version"
+PACKAGE_VERSION="$(node -pe "require('./package.json')['$prop']")"
+
 if [ -f VERSION ]; then
     ## PARSING VERSION + DEFINE HOTFIX VERSION
-    BASE_STRING=`cat VERSION`
+    BASE_STRING=$PACKAGE_VERSION
     BASE_LIST=(`echo $BASE_STRING | tr '.' ' '`)
     V_MAJOR=${BASE_LIST[0]}
     V_MINOR=${BASE_LIST[1]}
@@ -32,14 +35,14 @@ if [ -f VERSION ]; then
     git checkout -b hotfix-$INPUT_STRING master
 
     ## BUMP VERSION
-    echo "Will set new version to be $INPUT_STRING"
-    echo $INPUT_STRING > VERSION
-    echo "Version $INPUT_STRING:" > tmpfile
-    git log --pretty=format:" - %s" "v$BASE_STRING"...HEAD >> tmpfile
-    echo "" >> tmpfile
-    echo "" >> tmpfile
-    cat CHANGES >> tmpfile
-    mv tmpfile CHANGES
+    # echo "Will set new version to be $INPUT_STRING"
+    # echo $INPUT_STRING > VERSION
+    # echo "Version $INPUT_STRING:" > tmpfile
+    # git log --pretty=format:" - %s" "v$BASE_STRING"...HEAD >> tmpfile
+    # echo "" >> tmpfile
+    # echo "" >> tmpfile
+    # cat CHANGES >> tmpfile
+    # mv tmpfile CHANGES
     # git add CHANGES VERSION
     yarn version --new-version $INPUT_STRING --no-git-tag-version
     # git commit -m "Version bump to $INPUT_STRING"
