@@ -15,20 +15,16 @@ function parse_git_hash() {
   git rev-parse --short HEAD 2> /dev/null | sed "s/\(.*\)//"
 }
 
-# DEMO
-if [ -f VERSION ]; then
-    GIT_BRANCH=$(parse_git_branch)$(parse_git_hash)
-    GIT_VERSION=$(echo $GIT_BRANCH | sed 's/.*hotfix-\([^ ]*\).*/\1/')
-    git checkout master
-    git merge --no-ff $GIT_BRANCH
-    # git tag -a $GIT_VERSION
-    git tag -a -m "Tagging version $GIT_VERSION" "v$GIT_VERSION"
-    git push origin --tags
-    read -p "Do you want to delete $GIT_BRANCH branch? [y]" RESPONSE
-    if [ "$RESPONSE" = "" ]; then RESPONSE="y"; fi
-    if [ "$RESPONSE" = "y" ]; then
-        git branch -d $GIT_BRANCH
-    fi
-else
-    echo "Could not find a VERSION file"
+GIT_BRANCH=$(parse_git_branch)$(parse_git_hash)
+GIT_VERSION=$(echo $GIT_BRANCH | sed 's/.*hotfix-\([^ ]*\).*/\1/')
+
+git checkout master
+git merge --no-ff $GIT_BRANCH
+git tag -a -m "Tagging version $GIT_VERSION" "v$GIT_VERSION"
+git push origin --tags
+
+read -p "Do you want to delete $GIT_BRANCH branch? [y]" RESPONSE
+if [ "$RESPONSE" = "" ]; then RESPONSE="y"; fi
+if [ "$RESPONSE" = "y" ]; then
+    git branch -d $GIT_BRANCH
 fi
