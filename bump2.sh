@@ -40,6 +40,7 @@ if [ -f VERSION ]; then
     git tag -a -m "Tagging version $GIT_VERSION" "v$GIT_VERSION"
     git push origin --tags
     read -p "Do you want to delete $GIT_BRANCH branch? [y]" RESPONSE
+    if [ "$RESPONSE" = "" ]; then RESPONSE="y"; fi
     if [ "$RESPONSE" = "y" ]; then
         git branch -d $GIT_BRANCH
     fi
